@@ -9,8 +9,8 @@ For the crawler to work properly a folder named "export" should be existent in t
 To run the crawler through "cmd" please navigate to the downloaded jar directory and use command: 
   
   java -jar WebCrawlNorw  
-
-## Could you please write any language you prefer how you would collect the information;
+## Questions
+### Could you please write any language you prefer how you would collect the information;
 
 For the first task I would do this:
 
@@ -29,11 +29,11 @@ Now I'll use this URL to start scrapping the flight's data.
 9) Continue steps (3 - 8) for every flight displayed on the page.
 10) Click the "Show next day" button and repeat the steps untill data for the whole month is gathered. 
 
-## Provide the exact number of page loads (requests) that would be needed to extract the data;
+### Provide the exact number of page loads (requests) that would be needed to extract the data;
 
 From fiddler log, I can see there are 140 requests of which 80 are what I suspect the necessary page loads for getting the data.
 
-## Could the number of requests be reduced and how? Provide the exact number.
+### Could the number of requests be reduced and how? Provide the exact number.
 
 20 requests are for images, so one way to do it could be by blocking image requests. Thats -20 requests.
 1
