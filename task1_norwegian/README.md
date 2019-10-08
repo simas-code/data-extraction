@@ -3,9 +3,11 @@
 Runnable Jar is located in the packed_to_run folder.
 
 To run the crawler download packed_to_run folder.
+
 For the crawler to work properly a folder named "export" should be existent in the same direcotry as runnable jar. 
 
 To run the crawler through "cmd" please navigate to the downloaded jar directory and use command: 
+  
   java -jar WebCrawlNorw  
 
 ## Could you please write any language you prefer how you would collect the information;
