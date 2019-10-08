@@ -5,6 +5,7 @@
 I have not completed the second task because I was not able to find how to configure cookies for chromedriver to work properly on this site.
 
 For the second task I would do this:
+
 Firstly, I need to initiate the search (ARN (Stockholm) to LHR (London) departing 2019-11-04).
 
 1) Wait for the next page to load.
@@ -17,9 +18,9 @@ Firstly, I need to initiate the search (ARN (Stockholm) to LHR (London) departin
 8) Scrape the data from the row WebElement (Departure time, Arrival time).
 9) Scrape the data from the infobox under the selected row (Departure place, Arrival place, Connection place).
 10) Scrape the data from the side InfoBox WebElement (Total price, tax price);
-11) Repeat steps (4 - 11) for every displayed flight.
+11) Repeat steps (3 - 10) for every displayed flight.
 12) If existent select the next day at the top of the page, otherwise click "Later dates" button.
-13) Repeat steps (2 - 13) until data is collected for the period from 2019-11-04 to 2019-11-10.
+13) Repeat steps (1 - 12) until data is collected for the period from 2019-11-04 to 2019-11-10.
 
 ### Provide the exact number of page loads (requests) that would be needed to extract the data;
 
