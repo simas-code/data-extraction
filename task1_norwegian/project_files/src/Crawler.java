@@ -169,24 +169,8 @@ public class Crawler {
     	flight.setDepPlace(safeInnerText(getRowXpath(locationRowIndex, 1)));
     	flight.setArrTime(safeInnerText(getRowXpath(timeRowIndex, 2)));
     	flight.setArrPlace(safeInnerText(getRowXpath(locationRowIndex, 2))); 	
-    	
-    	//*[@id="ctl00_MainContent_ipcAvaDay_upnlResSelection"]/div[1]/div/table/tbody/tr[15]/td[2]
-    	//*[@id="ctl00_MainContent_ipcAvaDay_upnlResSelection"]/div[1]/div/table/tbody/tr[15]/td[2]
-    	
-//    	flight.setBasePrice(new BigDecimal(safeInnerText(getPriceXpath(16)).substring(1)));
-    	
-    	
-    	
     	flight.setBasePrice(getTotalPriceValue(timeRowIndex, priceType));
     	flight.setTaxPrice(getTaxValue());
-    	
-//    	flight.setBasePrice(new BigDecimal(safeInnerText(MiscStrings.TOTAL_PRICE).substring(1)));
-//       	flight.setBasePrice(new BigDecimal(getTaxValue().substring(1)));
-    	
-    	
-//    	flight.setTaxPrice(new BigDecimal(safeInnerText(getPriceXpath(18)).substring(1)));
-    	
-    	
     	return flight;
     }
     
@@ -207,9 +191,6 @@ public class Crawler {
     			sleep();
     			
     			flights.add(getFlight(timeRowIndex,locationRowIndex,priceType));
-    			
-    			//*[@id="bookingPrice_TaxesToggleBox"]/table
-    			
     			
 	    		index++;
 	    		timeRowIndex += 3;
