@@ -2,12 +2,16 @@
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -17,98 +21,74 @@ import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class Crawler {   
- 	private static final int DAYS_TO_CHECK = 30;
+public class Crawler {
+	
+ 	private static final int START_DAY = 4;
+ 	private static final int END_DAY = 10;
+ 	private static final String MONTH = "nov";
+ 	private static final String MONTH_FULL = "november";
  	
     private ChromeDriver driver;
     private WebDriverWait wait;
     private List<Flight> flights;
+    private String dateDay;
+    
+    
+    private void setCookies() {
+    	driver.manage().deleteAllCookies();
+    }
     
     Crawler() {
     	System.setProperty("webdriver.chrome.driver","C:\\Program Files\\chromedriver\\chromedriver.exe");
+    	ChromeOptions options = new ChromeOptions();
+    	Map<String, Object> prefs = new HashMap<String, Object>();
+    	prefs.put("intl.accept_languages", "en-US,en");
+    	options.setExperimentalOption("prefs", prefs);
+		options.addArguments("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36");
+		options.setExperimentalOption("useAutomationExtension", false);
+		options.setExperimentalOption("excludeSwitches",Collections.singletonList("enable-automation"));    
 
-        ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("--no-sandbox");
-        chromeOptions.addArguments("--headless");
-        chromeOptions.addArguments("disable-gpu");
-            	
-    	this.driver = new ChromeDriver(chromeOptions);
+    	this.driver = new ChromeDriver(options);
         this.wait = new WebDriverWait(driver, 30);
         this.flights = new ArrayList<Flight>();
+        this.dateDay = String.valueOf(START_DAY);
     }
 
-    private void sleep() {
+    private void sleep(int flg) {
     	try {
-			Thread.sleep(3000); 
-		} catch(InterruptedException e) {
+	    	switch (flg) {
+	    	case 1 :
+		    	Thread.sleep(3000);
+		    	break;
+	    	case 2 : 
+	    		Thread.sleep(10000);		
+	    		break;
+	    	}
+    	} catch(InterruptedException e) {
 			System.out.println("Thread.sleep failed.");
 			e.printStackTrace();
 		}
     }
     
-    private String getRowXpath(int rowIndex, int typeFlag) {
-    	return String.format(MiscStrings.CONTENT_ROW_DATA,rowIndex,typeFlag);
-    }
-    
-    private BigDecimal getTaxValue() {
-    	String tax = "0";
-    	WebElement taxTable = fluentWait(By.xpath(MiscStrings.TAX_TABLE));
-    	for (WebElement tr : taxTable.findElements(By.tagName("tr"))) {
-    		if (safeInnerText(tr).toLowerCase().contains("tax")) {
-    			tax = safeInnerText(tr.findElement(By.className("rightcell")));
-    		}
-    	}
-    	return new BigDecimal(tax.substring(1));
-    }
-    
-    private BigDecimal getTotalPriceValue(int rowIndex, MiscStrings.PriceType priceType) {
-    	String price = "-1";  	
-    	switch (priceType) {
-			case LOWFARE :
-				price = safeInnerText(MiscStrings.LOWFARE_PRICE).substring(1);
-				break;
-			case LOWFAREPLUS :
-				price = safeInnerText(MiscStrings.LOWFAREPLUS_PRICE).substring(1);
-				break;
-			case FLEX :
-				price = safeInnerText(MiscStrings.FLEX_PRICE).substring(1);
-				break;
+	private String selectPrice(String id) {
+		String type = "";
+		if (existsElement(String.format(MiscStrings.PRICE_ECONBG,id))) {
+			safeClickXpath(String.format(MiscStrings.PRICE_ECONBG,id));
+			type = "ECONBG";
+		} else if (existsElement(String.format(MiscStrings.PRICE_ECOA,id))) {
+			safeClickXpath(String.format(MiscStrings.PRICE_ECOA,id));
+			type = "ECOA";
+		} else if (existsElement(String.format(MiscStrings.PRICE_PREMN,id))) {
+			safeClickXpath(String.format(MiscStrings.PRICE_PREMN,id));
+			type = "PREMN";
+		} else if (existsElement(String.format(MiscStrings.PRICE_PREMB,id))) {
+			safeClickXpath(String.format(MiscStrings.PRICE_PREMB,id));
+			type = "PREMB";
+		} else if (existsElement(String.format(MiscStrings.PRICE_PREMA,id))) {
+			safeClickXpath(String.format(MiscStrings.PRICE_PREMA,id));
+			type = "PREMA";
 		}
-    	return new BigDecimal(price);
-    }
-    
-    
-    private MiscStrings.PriceType checkSelection(int index) {
-    	MiscStrings.PriceType select = MiscStrings.PriceType.NONE;
-    	if (existsElement(String.format(MiscStrings.PRICE_LOWFARE_CHECKBOX,index))) {
-			select = MiscStrings.PriceType.LOWFARE;
-		} else if (existsElement(String.format(MiscStrings.PRICE_LOWFAREPLUS_CHECKBOX,index))) {
-			select = MiscStrings.PriceType.LOWFAREPLUS;
-		} else if (existsElement(String.format(MiscStrings.PRICE_FLEX_CHECKBOX,index))) {
-			select = MiscStrings.PriceType.FLEX;
-		}
-    	return select;
-    }
-    
-	private boolean selectCheckbox(MiscStrings.PriceType select, int index) {
-		boolean selected = false;
-		switch (select) {
-			case LOWFARE :
-				safeClick(String.format(MiscStrings.PRICE_LOWFARE_CHECKBOX,index));
-				selected = true;
-				break;
-			case LOWFAREPLUS :
-				safeClick(String.format(MiscStrings.PRICE_LOWFAREPLUS_CHECKBOX,index));
-				selected = true;
-				break;
-			case FLEX :
-				safeClick(String.format(MiscStrings.PRICE_FLEX_CHECKBOX,index));
-				selected = true;
-				break;
-			case NONE :
-				selected = false;
-		}
-		return selected;
+		return type;
 	}
     
 	private String safeInnerText(String xpath) {
@@ -129,9 +109,9 @@ public class Crawler {
 			tmp = element.getAttribute("innerText");
 		}
 		return tmp;
-	}    
+	}
 	
-    private void safeClick(String xpath) {
+    private void safeClickXpath(String xpath) {
     	try {
 			fluentWait(By.xpath(xpath)).click();
 		}
@@ -141,9 +121,29 @@ public class Crawler {
 		}
     }
     
+    private void safeClick(String className) {
+    	try {
+			fluentWait(By.className(className)).click();
+		}
+		catch(org.openqa.selenium.StaleElementReferenceException ex)
+		{
+			fluentWait(By.className(className)).click();
+		}
+    }
+    
+    private void safeClick(WebElement element) {
+    	try {
+			element.click();
+		}
+		catch(org.openqa.selenium.StaleElementReferenceException ex)
+		{
+			element.click();
+		}
+    }
+    
     private boolean existsElement(String xpath) {
     	driver.manage().timeouts().implicitlyWait(0, TimeUnit.MILLISECONDS);
-    	boolean exists = driver.findElements(By.xpath(xpath)).size() != 0;
+    	boolean exists = driver.findElements(By.xpath(xpath) ).size() != 0;
     	driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
     	return exists;
     }
@@ -162,51 +162,149 @@ public class Crawler {
         return  foo;
     }
     
-    private Flight getFlight(int timeRowIndex, int locationRowIndex, MiscStrings.PriceType priceType) {
-    	Flight flight = new Flight(fluentWait(By.xpath(MiscStrings.FLIGH_TTITLE_FIELD)).getAttribute("title").substring(7),priceType);
-    	flight.setDateString(safeInnerText(MiscStrings.DATE_STRING_FIELD));
-    	flight.setDepTime(safeInnerText(getRowXpath(timeRowIndex, 1)));
-    	flight.setDepPlace(safeInnerText(getRowXpath(locationRowIndex, 1)));
-    	flight.setArrTime(safeInnerText(getRowXpath(timeRowIndex, 2)));
-    	flight.setArrPlace(safeInnerText(getRowXpath(locationRowIndex, 2))); 	
-    	flight.setBasePrice(getTotalPriceValue(timeRowIndex, priceType));
-    	flight.setTaxPrice(getTaxValue());
+    private Flight getFlightData(String rowId, String priceType, int flg) {
+    	this.wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(String.format(MiscStrings.ROW_INFOBOX,rowId))));
+    	Flight flight = new Flight(safeInnerText(String.format(MiscStrings.FLIGHT_ID, rowId, flg -1)),priceType);
+    	flight.setDateString(String.format("%s %s", dateDay, MONTH));
+    	flight.setDepTime(safeInnerText(String.format(MiscStrings.DEP_TIME_FIELD, rowId)));
+    	flight.setArrTime(safeInnerText(String.format(MiscStrings.ARR_TIME_FIELD, rowId)));
+    	if (flg == 3) {
+    		flight.setDepPlace(safeInnerText(String.format(MiscStrings.ROW_INFOBOX_ROUTE_FIRST, rowId, flg)));
+			flight.setConPlace(safeInnerText(String.format(MiscStrings.ROW_INFOBOX_ROUTE_CON, rowId, flg)));
+			flight.setArrPlace(safeInnerText(String.format(MiscStrings.ROW_INFOBOX_ROUTE_LAST, rowId)));
+    	} else {
+    		flight.setDepPlace(safeInnerText(String.format(MiscStrings.ROW_INFOBOX_ROUTE_FIRST, rowId, flg)));
+    		flight.setArrPlace(safeInnerText(String.format(MiscStrings.ROW_INFOBOX_ROUTE_CON, rowId, flg))); 
+		}
+    	flight.setBasePrice(new BigDecimal(safeInnerText(MiscStrings.TOTAL_PRICE_CASH).replace(",", ".")));
+    	flight.setTaxPrice(new BigDecimal(safeInnerText(MiscStrings.TOTAL_TAXES).replace(",", ".")));
+    	System.out.println(flight.toText());
     	return flight;
     }
     
-    public boolean crawl(String url) {
-		this.driver.navigate().to(url);
-		int index;
-    	int timeRowIndex;
-    	int locationRowIndex;
-    	MiscStrings.PriceType priceType;
-		for (int i = 0; i < DAYS_TO_CHECK; i++) {
-			index = 0;
-	    	timeRowIndex = 1;
-	    	locationRowIndex = 2;
-	    	do {
-    			this.wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(MiscStrings.TBODY)));
-    			priceType = checkSelection(index);
-    			selectCheckbox(priceType,index);
-    			sleep();
-    			
-    			flights.add(getFlight(timeRowIndex,locationRowIndex,priceType));
-    			
-	    		index++;
-	    		timeRowIndex += 3;
-	    		locationRowIndex += 3;
-	    	} while(checkSelection(index) != MiscStrings.PriceType.NONE);
-	    	
-	    	this.wait.until(ExpectedConditions.elementToBeClickable(By.xpath(MiscStrings.NEXT_DAY_CLICK)));
-	    	safeClick(MiscStrings.NEXT_DAY_CLICK);
-	    	sleep();
+    private int checkRouteViability(String id) {
+    	this.wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(String.format(MiscStrings.INFOBOX, id))));
+    	int flg = -1;
+    	
+    	if (existsElement(String.format(MiscStrings.ROW_INFOBOX_ROUTE_CON, id, 2))) {
+    		if (safeInnerText(String.format(MiscStrings.ROW_INFOBOX_ROUTE_CON, id, 2)).toLowerCase().contains("heathrow")) {
+        		flg = 2;
+        	}
+    	} else {
+    		if (safeInnerText(String.format(MiscStrings.ROW_INFOBOX_ROUTE_CON, id, 3)).toLowerCase().contains("oslo")) {
+        		flg = 3;
+    		}
     	}
-    	driver.close();
+    	return flg;
+    }
+    
+    private void initiateSearch() {
+    	this.wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(MiscStrings.SEARCH_CONTAINER)));
+    	safeClickXpath(String.format(MiscStrings.ONE_WAY_CHECKBOX));
+    	
+    	fluentWait(By.xpath(MiscStrings.FROM_FIELD)).sendKeys("ARN");
+    	this.wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(MiscStrings.ARN)));
+    	safeClickXpath(MiscStrings.ARN);
+    	
+    	fluentWait(By.xpath(MiscStrings.TO_FIELD)).sendKeys("LHR");
+    	this.wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(MiscStrings.LHR)));
+    	safeClickXpath(MiscStrings.LHR);
+    	
+    	this.wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("flOutDate")));
+    	safeClick("flOutDate");
+    	
+    	WebElement calendarHead = fluentWait(By.xpath(MiscStrings.CALENDAR_HEAD));
+    	String tmp;
+    	for (WebElement span : calendarHead.findElements(By.tagName("span"))) {
+    		tmp = safeInnerText(span);
+    		if (tmp.toLowerCase().equals(MONTH) ||
+    				tmp.toLowerCase().equals(MONTH_FULL)) {
+    			safeClick(span);
+    			break;
+    		}
+    	}
+    	
+    	this.wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(MiscStrings.CALENDAR_BODY)));
+    	WebElement calendarBody = fluentWait(By.xpath(MiscStrings.CALENDAR_BODY));
+    	for (WebElement a : calendarBody.findElements(By.tagName("a"))) {
+    		tmp = safeInnerText(a);
+    		if (tmp.equals(String.valueOf(START_DAY))) {
+    			safeClick(a);
+    			break;
+    		}
+    	}
+    	sleep(1);
+    	safeClickXpath(MiscStrings.SELECT);
+    	
+    }
+    
+    private String incDateDay(String dateDay) {
+    	return dateDay = String.valueOf(Integer.parseInt(dateDay) + 1);
+    }
+    
+    private boolean selectDate(String dateDay) { // returns false if date not found also later_dates button was clicked
+    	boolean isFound = false;
+    	if (existsElement(MiscStrings.DATE_SELECTION_TABS)) {
+			WebElement dateTabs = fluentWait(By.xpath(MiscStrings.DATE_SELECTION_TABS));
+			for (WebElement td : dateTabs.findElements(By.tagName("td"))) {
+				String tmp = safeInnerText(td);
+				if (tmp.toLowerCase().contains(dateDay + " " + MONTH)){
+					isFound = true;
+					safeClick(td);
+					sleep(2);
+					break;
+				}
+			}
+		}
+    	return isFound;
+    }
+    
+    public boolean crawl(String url) throws PageNotLoadedException {
+		this.driver.navigate().to(url);
+		initiateSearch();
+		sleep(2);
+		boolean run = true;
+		
+		while(run){
+			if (existsElement(MiscStrings.TBODY)) {
+				
+				if (Integer.parseInt(dateDay) > END_DAY) {
+					break;
+				}
+				
+				if (!selectDate(dateDay)) {
+					safeClickXpath(MiscStrings.LATER_DATES_BUTTON);
+					sleep(2);
+					continue;
+				} 
+			
+				String id = "";
+				String priceType = "";
+				WebElement tbody = fluentWait(By.xpath(MiscStrings.TBODY));
+				int flg = 0;
+				for(WebElement row : tbody.findElements(By.tagName("tr"))) {
+					id = row.getAttribute("id");
+					if (id.length() > 7) {
+						id = (row.getAttribute("id").split("_"))[2];
+						priceType = selectPrice(id);
+						flg = checkRouteViability(id); // check if direct flight or with a connection at Oslo
+						if (flg > 0) {
+							flights.add(getFlightData(id, priceType, flg));
+						}
+					} else {
+						continue;
+					}
+				}
+				dateDay = incDateDay(dateDay);
+			} else {
+				throw new PageNotLoadedException("Possible human verification screen.");
+			}
+		}
+		driver.close();
     	return true;
     }
     
     public List<Flight> getFlights(){
     	return this.flights;
     }
-    
 }

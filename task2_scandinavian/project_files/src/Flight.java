@@ -7,15 +7,17 @@ public class Flight {
 	private String depPlace;
 	private String arrTime;
 	private String arrPlace;
-	private MiscStrings.PriceType priceType;
+	private String conPlace;
+	private String priceType;
 	private BigDecimal basePrice;
 	private BigDecimal taxPrice;
 	
-	Flight(String flightId, MiscStrings.PriceType priceType){
+	Flight(String flightId, String priceType){
 		this.flightId = flightId;
 		this.dateString = "";
 		this.depTime = "";
 		this.depPlace = "";
+		this.conPlace = "";
 		this.arrTime = "";
 		this.arrPlace = "";
 		this.priceType = priceType;
@@ -32,6 +34,9 @@ public class Flight {
 	public void setDepPlace(String depPlace) {
 		this.depPlace = depPlace;
 	}
+	public void setConPlace(String conPlace) {
+		this.conPlace = conPlace;
+	}
 	public void setArrTime(String arrTime) {
 		this.arrTime = arrTime;
 	}
@@ -46,9 +51,9 @@ public class Flight {
 	}
 	
 	public String toText() {
-		return String.format("%s %s %s %s %s %s %s %.2f %.2f", flightId, dateString, depPlace, depTime, arrPlace, arrTime, priceType, basePrice, taxPrice);
+		return String.format("%s %s %s %s %s %s %s %s %.2f %.2f", flightId, dateString, depTime, depPlace, arrTime, arrPlace, conPlace, priceType, basePrice, taxPrice);
 	}
 	public String toCsvString() {
-		return String.format("\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%.2f,%.2f", flightId, dateString, depPlace, depTime, arrPlace, arrTime, priceType, basePrice, taxPrice);
+		return String.format("\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%.2f,%.2f", flightId, dateString, depTime, depPlace, arrTime, arrPlace, conPlace, priceType, basePrice, taxPrice);
 	}
 }

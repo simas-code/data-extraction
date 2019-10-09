@@ -1,33 +1,59 @@
 
 public class MiscStrings {
-	public static final String URL = "https://www.norwegian.com/en/ipc/availability/avaday?D_City=OSL&A_City=RIX&TripType=1&D_Day=1&D_Month=201911&D_SelectedDay=1&R_Day=1&R_Month=201911&R_SelectedDay=1&IncludeTransit=false&AgreementCodeFK=-1&CurrencyCode=EUR&rnd=24488&processid=75799&mode=ab";
+	public static final String ARN = "//*[@id=\"ARN\"]";
+	public static final String LHR = "//*[@id=\"LHR\"]";
 	
-	public static final String TBODY = "//*[@id=\"avaday-outbound-result\"]/div/div/div[2]/div/table/tbody";
-    public static final String PRICE_LOWFARE_CHECKBOX = "//*[@id=\"FlightSelectOutboundStandardLowFare%d\"]";
-    public static final String PRICE_LOWFAREPLUS_CHECKBOX = "//*[@id=\"FlightSelectOutboundStandardLowFarePlus%d\"]";
-    public static final String PRICE_FLEX_CHECKBOX = "//*[@id=\"FlightSelectOutboundStandardFlex%d\"]";
-    public static final String FLIGH_TTITLE_FIELD = "//*[@id=\"avaday-outbound-result\"]/div/div/div[2]/div/table/tbody/tr[2]/td[1]";
-    public static final String CONTENT_ROW_DATA = "//*[@id=\"avaday-outbound-result\"]/div/div/div[2]/div/table/tbody/tr[%d]/td[%d]/div"; // %d => rowIndex + 3; %d => 1 for DepartureData, 2 for ArrivalData
- 	public static final String DATE_STRING_FIELD = "//*[@id=\"avaday-outbound-result\"]/div/div/div[1]/table/tbody/tr/td[2]";
- 	public static final String NEXT_DAY_CLICK = "//*[@id=\"avaday-outbound-result\"]/div/div/div[3]/table/tbody/tr/td[2]/div/span[2]";
- 	
- 	public static final String LOWFARE_PRICE = "//*[@id=\"ctl00_MainContent_ipcAvaDay_upnlResSelection\"]/div[1]/div/table/tbody/tr[10]/td[2]";
- 	public static final String LOWFAREPLUS_PRICE = "//*[@id=\"ctl00_MainContent_ipcAvaDay_upnlResSelection\"]/div[1]/div/table/tbody/tr[12]/td[2]";
- 	public static final String FLEX_PRICE = "//*[@id=\"ctl00_MainContent_ipcAvaDay_upnlResSelection\"]/div[1]/div/table/tbody/tr[12]/td[2]";
-
- 	public static final String TAX_TABLE = "//*[@id=\"bookingPrice_TaxesToggleBox\"]/table/tbody/tr/td/table";
- 	
+	public static final String URL = "https://classic.flysas.com/en/de/";
+	public static final String URL_TEST = "https://www.whatismybrowser.com";
+	
+	public static final String SEARCH_CONTAINER = "//*[@id=\"SipContentFullRegionContainer\"]";
+	public static final String ONE_WAY_CHECKBOX = "//*[@id=\"ctl00_FullRegion_MainRegion_ContentRegion_ContentFullRegion_ContentLeftRegion_CEPGroup1_CEPActive_cepNDPRevBookingArea_ceptravelTypeSelector_oneway\"]";
+	public static final String FROM_FIELD = "//*[@id=\"ctl00_FullRegion_MainRegion_ContentRegion_ContentFullRegion_ContentLeftRegion_CEPGroup1_CEPActive_cepNDPRevBookingArea_predictiveSearch_txtFrom\"]";
+	public static final String TO_FIELD = "//*[@id=\"ctl00_FullRegion_MainRegion_ContentRegion_ContentFullRegion_ContentLeftRegion_CEPGroup1_CEPActive_cepNDPRevBookingArea_predictiveSearch_txtTo\"]";
+	public static final String CALENDAR_HEAD = "//*[@id=\"ui-datepicker-div\"]/div/div"; 
+	public static final String CALENDAR_BODY = "//*[@id=\"ui-datepicker-div\"]/table"; 
+	public static final String SELECT = "//*[@id=\"ctl00_FullRegion_MainRegion_ContentRegion_ContentFullRegion_ContentLeftRegion_CEPGroup1_CEPActive_cepNDPRevBookingArea_Searchbtn_ButtonLink\"]/span[2]";
+	
+	public static final String TBODY = "//*[@id=\"WDSEffect_table_0\"]/tbody";
+	public static final String PRICE_ECONBG = "//*[@id=\"price_0_%s_ECONBG\"]";
+	public static final String PRICE_ECOA = "//*[@id=\"price_0_%s_ECOA\"]";
+	public static final String PRICE_PREMN = "//*[@id=\"price_0_%s_PREMN\"]";
+	public static final String PRICE_PREMB = "//*[@id=\"price_0_%s_PREMB\"]";
+	public static final String PRICE_PREMA = "//*[@id=\"price_0_%s_PREMA\"]";
+	
+	public static final String ROW_INFOBOX = "//*[@id=\"toggleId_0_%s\"]/table/tbody";
+	public static final String FLIGHT_ID = "//*[@id=\"toggleId_0_%s\"]/table/tbody/tr[2]/td[%d]/acronym";
+	
+	public static final String INFOBOX = "//*[@id=\"toggleId_0_%s\"]/table/tbody";
+	public static final String DEP_TIME_FIELD = "//*[@id=\"idLine_0_%s\"]/td[7]/span[1]";
+	public static final String ARR_TIME_FIELD = "//*[@id=\"idLine_0_%s\"]/td[7]/span[3]";
+	public static final String ROW_INFOBOX_ROUTE_FIRST = "//*[@id=\"toggleId_0_%s\"]/table/tbody/tr[2]/td[%d]/span[1]";
+	public static final String ROW_INFOBOX_ROUTE_CON = "//*[@id=\"toggleId_0_%s\"]/table/tbody/tr[2]/td[%d]/span[3]";
+	public static final String ROW_INFOBOX_ROUTE_LAST = "//*[@id=\"toggleId_0_%s\"]/table/tbody/tr[5]/td[3]/span[3]";
+	public static final String LATER_DATES_BUTTON = "//*[@id=\"later_1\"]/a";
+	
+	//public static final String ROW_INFOBOX_ROUTE_FIRST_ = "//*[@id=\"toggleId_0_%s\"]/table/tbody/tr[2]/td[3]/span[3]";
+	
+	
+	
+	//*[@id="toggleId_0_0"]/table/tbody/tr[2]/td[2]
+	
+	//*[@id="toggleId_0_16"]/table/tbody/tr[2]/td[3]/span[3]/span
+	//*[@id="toggleId_0_2"]/table/tbody/tr[2]/td[3]/span[3]/span
+	//*[@id="toggleId_0_0"]/table/tbody/tr[2]/td[2]/span[3]/span[1]
+	public static final String DATE_SELECTION_TABS = "//*[@id=\"flow\"]/div/div[2]/div[1]/div/table/tbody/tr/td/div[2]/table/tbody/tr";
+	
+	
+	public static final String TOTAL_PRICE_CASH = "//*[@id=\"totalPriceCash\"]";
+	public static final String TOTAL_TAXES = "//*[@id=\"taxesAndFees\"]";
+	
 	public static final String INFO = "Welcome!\n"
-			+ "This web crawler scrapes flight data from website \"www.Norwegian.com\".\n"
+			+ "This web crawler scrapes flight data from website \"https://classic.flysas.com/en/de/\".\n"
 			+ "Scraped data is as follows: flightID, flight date, departure airport, departure time, arrival airport, arrival time, cheapest price, taxes.\n"
-			+ "Data is scraped for all direct flights from OSL (Oslo) to RIX (Riga) departing from 2019-11-01 to 2019-11-30.\n"
+			+ "Data is scraped for all direct or with a connection at Oslo flights from ARN (Stockholm) to LHR (London) departing from 2019-11-04 to 2019-11-10.\n"
 			+ "Data is printed in console and saved in \".csv\" format at local project folder \"/export\".\n";
 	public static final String PRINT = "Printing gathered data:\n";
- 	
- 	public enum PriceType { 
-    	NONE, 
-    	LOWFARE, 
-    	LOWFAREPLUS,
-    	FLEX
-    	};
+	
+	
+	
 }
