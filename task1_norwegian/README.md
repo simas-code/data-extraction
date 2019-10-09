@@ -9,6 +9,10 @@ For the crawler to work properly a folder named "export" should be existent in t
 To run the crawler through "cmd" please navigate to the downloaded jar directory and use command: 
   
   java -jar WebCrawlNorw.jar
+  
+Data is exported in csv format:
+
+<flightId>,<flightDate>,<depPlace>,<depTime>,<arrPlace>,<arrTime>,<priceType>,<basePrice>,<taxPrice>
 ## Questions
 ### Could you please write any language you prefer how you would collect the information;
 
