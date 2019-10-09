@@ -242,7 +242,7 @@ public class Crawler {
     	return dateDay = String.valueOf(Integer.parseInt(dateDay) + 1);
     }
     
-    private boolean selectDate(String dateDay) { // returns false if date not found also later_dates button was clicked
+    private boolean selectDate(String dateDay) { // returns false if date not found also later_dates button is clicked
     	boolean isFound = false;
     	if (existsElement(MiscStrings.DATE_SELECTION_TABS)) {
 			WebElement dateTabs = fluentWait(By.xpath(MiscStrings.DATE_SELECTION_TABS));
