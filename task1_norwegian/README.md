@@ -8,11 +8,12 @@ For the crawler to work properly a folder named "export" should be existent in t
 
 To run the crawler through "cmd" please navigate to the downloaded jar directory and use command: 
   
-  java -jar WebCrawlNorw.jar
+    java -jar WebCrawlNorw.jar
   
 Data is exported in csv format:
 
-<flightId>,<flightDate>,<depPlace>,<depTime>,<arrPlace>,<arrTime>,<priceType>,<basePrice>,<taxPrice>
+flightId, flightDate, depPlace, depTime, arrPlace, arrTime, priceType, basePrice, taxPrice;
+
 ## Questions
 ### Could you please write any language you prefer how you would collect the information;
 
@@ -40,8 +41,8 @@ From fiddler log, I can see there are 140 requests of which 80 are what I suspec
 ### Could the number of requests be reduced and how? Provide the exact number.
 
 20 requests are for images, so one way to do it could be by blocking image requests. Thats -20 requests.
-1
-2 javascript and 9 of them are fonts and css, I am not sure if its possible or healthy to block these requests so I cannot comment on that.
+
+11 javascript and 9 of them are fonts and css, I am not sure if its possible or healthy to block these requests so I cannot comment on that.
 
 From what I gathered blocking requests can be done for chromedriver through DevTool API.
 
