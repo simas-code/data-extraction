@@ -12,7 +12,7 @@ To run the crawler through "cmd" please navigate to the downloaded jar directory
   
 Data is exported in csv format:
 
-<flightId>,<flightDate>,<depTime>,<depPlace>,<arrTime>,<arrPlace>,<conPlace>,<priceType>,<basePrice>,<taxPrice>
+flightId, flightDate, depTime, depPlace, arrTime, arrPlace, conPlace, priceType, basePrice, taxPrice
 
 ## Questions
 ### Could you please write any language you prefer how you would collect the information;
