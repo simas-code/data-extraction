@@ -1,8 +1,23 @@
+# WebCrawlerScandinavian
+
+Runnable Jar is located in the packed_to_run folder.
+
+To run the crawler download packed_to_run folder.
+
+For the crawler to work properly a folder named "export" should be existent in the same direcotry as runnable jar. 
+
+To run the crawler through "cmd" please navigate to the downloaded jar directory and use command: 
+  
+  java -jar WebCrawlScand.jar
+  
+Data is exported in csv format:
+
+<flightId>,<flightDate>,<depTime>,<depPlace>,<arrTime>,<arrPlace>,<conPlace>,<priceType>,<basePrice>,<taxPrice>
 
 ## Questions
 ### Could you please write any language you prefer how you would collect the information;
 
-I have not completed the second task because I was not able to find how to configure cookies for chromedriver to work properly on this site.
+I have not completed the second task because I was not able to find how to configure cookies for chromedriver to work properly on this site. The crawler works if CAPTCHA is verified manually.
 
 For the second task I would do this:
 
