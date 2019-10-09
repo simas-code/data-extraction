@@ -39,9 +39,4 @@ Firstly, I need to initiate the search (ARN (Stockholm) to LHR (London) departin
 
 ### Provide the exact number of page loads (requests) that would be needed to extract the data;
 
-  ---
-
 ### Could the number of requests be reduced and how? Provide the exact number.
-
-  ---
-
